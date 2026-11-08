@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h2>Lancer une partie</h2>
+
+{% if REQUEST_VARS['partie_creee_id'] %}
+    <div class="alert-success">
+        Partie lancée avec succès ! (ID: {{ REQUEST_VARS['partie_creee_id'] }})
+        <br>Redirection vers le plateau...
+    </div>
+    <meta http-equiv="refresh" content="1; url=plateau">
+{% else %}
+
+    <form method="post">
+        <div style="display: flex; justify-content: space-around;">
+            
+            <div>
+                <h3>1. Les Équipes</h3>
+                <label>Équipe 1 :</label>
+                <select name="choix_equipe1" required>
+                    {% for equipe in REQUEST_VARS['equipes'] %}
+                        <option value="{{ equipe[0] }}">{{ equipe[1] }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <label>Équipe 2 :</label>
+                <select name="choix_equipe2" required>
+                    {% for equipe in REQUEST_VARS['equipes'] %}
+                        <option value="{{ equipe[0] }}">{{ equipe[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <h3>2. La Configuration</h3>
+                <label>Choisir une configuration :</label>
+                <br>
+                <select name="choix_config" required>
+                    <option value="" disabled selected>-- Choisir une config --</option>
+                    {% for conf in REQUEST_VARS['configs'] %}
+                        <option value="{{ conf[0] }}">
+                            {{ conf[0] }} (Grille {{ conf[1] }}x{{ conf[1] }}, {{ conf[2] }} tours)
+                        </option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <small>Pas de config ? <a href="config">En créer une ici</a></small>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2em;">
+            <input type="submit" name="bouton_lancer" value="JOUER" style="font-weight: bold; padding: 10px 20px;">
+        </div>
+    </form>
+
+    {% include 'message.html' %}
+{% endif %}
+
+{% endblock %}

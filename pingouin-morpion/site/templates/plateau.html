@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+{% if REQUEST_VARS['refresh'] %}<meta http-equiv="refresh" content="0; url=plateau">{% endif %}
+
+<!-- Définition des variables CSS dynamiques -->
+<style>
+:root {
+    --coul-equipe1: {{ REQUEST_VARS['coul_equipe1'] }};
+    --coul-equipe2: {{ REQUEST_VARS['coul_equipe2'] }};
+    --coul-tour: {{ REQUEST_VARS['tour_couleur'] }};
+    --taille-grille: {{ REQUEST_VARS['taille_grille'] }};
+}
+</style>
+
+<div class="center">
+    <div class="match-header">
+        <div class="equipe-1">
+            {{ REQUEST_VARS['nom_equipe1'] }}
+        </div>
+        <div>VS</div>
+        <div class="equipe-2">
+            {{ REQUEST_VARS['nom_equipe2'] }}
+        </div>
+    </div>
+
+    {% if REQUEST_VARS['gagnant_nom'] %}
+        <div class="alert-success victory-msg">
+            🎉 VICTOIRE DE : {{ REQUEST_VARS['gagnant_nom'] }} ! 🎉
+        </div>
+        <br>
+        <a href="Jeu" class="button">Lancer une nouvelle partie</a>
+
+    {% else %}
+        <form method="POST">
+            <div class="selection-box-tour">
+                <h3>À toi de jouer : <span class="nom-joueur-actif">{{ REQUEST_VARS['tour_nom'] }}</span></h3>
+
+                {% if REQUEST_VARS['mes_morpions'] and REQUEST_VARS['mes_morpions']|length > 0 %}
+                    <p>Choisis ton combattant :</p>
+                    <div class="morpion-list">
+                        {% for m in REQUEST_VARS['mes_morpions'] %}
+                        <label class="morpion-option">
+                            <input type="radio" name="choix_img" value="{{ m[0] }}" {% if loop.first %}checked{% endif %}>
+                            <div class="morpion-card">
+                                <img src="{{ SESSION['DIRECTORY'] }}/static/img/{{ m[1] }}">
+                                <small>{{ m[0] }}</small>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="alert-error">Vous n'avez plus de pions disponibles !</p>
+                {% endif %}
+            </div>
+
+            <p>Cliquez sur une case libre pour poser :</p>
+
+            {% if REQUEST_VARS['selection_pion'] %}
+                <div class="selection-box-tour actions-box">
+                    <h4>Actions pour le pion en ({{ REQUEST_VARS['selection_pion'].x }}, {{ REQUEST_VARS['selection_pion'].y }})</h4>
+                    
+                    <div class="action-buttons">
+                        <button type="submit" name="btn_action" value="attaque" class="btn-action btn-attaque">
+                            ⚔️ Attaquer
+                        </button>
+
+                        {% if REQUEST_VARS['actions_possibles']['soin'] %}
+                            <button type="submit" name="btn_action" value="soin" class="btn-action btn-soin">
+                                💖 Soin (1 ⚡)
+                            </button>
+                        {% else %}
+                            <button disabled class="btn-action btn-disabled">Soin (Pas assez de mana)</button>
+                        {% endif %}
+
+                        {% if REQUEST_VARS['actions_possibles']['boule_feu'] %}
+                            <button type="submit" name="btn_action" value="boule_feu" class="btn-action btn-feu">
+                                🔥 Boule de Feu (2 ⚡)
+                            </button>
+                        {% else %}
+                             <button disabled class="btn-action btn-disabled">Feu (Pas assez de mana)</button>
+                        {% endif %}
+
+                        {% if REQUEST_VARS['actions_possibles']['armageddon'] %}
+                            <button type="submit" name="btn_action" value="armageddon" class="btn-action btn-arma">
+                                ☠️ Armageddon (5 ⚡)
+                            </button>
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="src_x" value="{{ REQUEST_VARS['selection_pion'].x }}">
+                    <input type="hidden" name="src_y" value="{{ REQUEST_VARS['selection_pion'].y }}">
+                </div>
+            {% endif %}
+
+            <p>Cliquez sur une case libre pour poser OU sur un de vos pions pour agir :</p>
+
+            <div class="plateau-grille">
+                {% for x in range(REQUEST_VARS['taille_grille']) %}
+                    {% for y in range(REQUEST_VARS['taille_grille']) %}
+                      <div class="case">
+    {% set cell = REQUEST_VARS['grille'][x][y] %}
+    
+    {% if cell %}
+        {% if cell.mana == -9999 %}
+            <div class="case-detruite"></div>
+        
+        {% else %}
+            <div class="pion-container">
+                <button type="submit" name="btn_select_pion" value="{{ x }},{{ y }}" class="btn-pion-select">
+                    <img src="{{ SESSION['DIRECTORY'] }}/static/img/{{ cell.image }}" 
+                         class="pion-image pion-couleur-{{ cell.couleur|replace('#', '')|replace(' ', '') }} 
+                         {% if REQUEST_VARS['selection_pion'] and REQUEST_VARS['selection_pion'].x == x and REQUEST_VARS['selection_pion'].y == y %}selected-ring{% endif %}"
+                         data-couleur="{{ cell.couleur }}">
+                </button>
+                
+               <div class="pion-stats">
+                                            <span class="stat-pv">❤ {{ cell.pv }}</span>
+                                            <span class="stat-mana">⚡ {{ cell.mana }}</span>
+                                            <span class="stat-reussite">🎲 {{ cell.reussite|round(1) }}</span>
+                                        </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        {% if not REQUEST_VARS['selection_pion'] or REQUEST_VARS['message_class'] == 'alert-warning' %}
+            <button type="submit" name="btn_jouer_case" value="{{ x }},{{ y }}" class="btn-case">+</button>
+        {% endif %}
+    {% endif %}
+</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </form>
+    {% endif %}
+    
+    <br><br>
+    <a href="Jeu" class="link-abandon">Abandonner la partie</a>
+    
+    {% include 'message.html' %}
+</div>
+<script>
+// Appliquer les couleurs dynamiques aux bordures des pions
+document.querySelectorAll('.pion-image[data-couleur]').forEach(img => {
+    img.style.borderColor = img.getAttribute('data-couleur');
+});
+</script>
+
+{% endblock %}
+
+

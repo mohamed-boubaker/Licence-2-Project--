@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<div class="center">
+    <h2>Liste des équipes</h2>
+
+    {% include 'message.html' %}
+
+    {% if REQUEST_VARS['equipes'] %}
+        <table style="margin: auto; border-collapse: collapse; width: 80%;">
+            <tr style="background-color: #ddd;">
+                <th style="padding: 10px;">Nom de l'équipe</th>
+                <th style="padding: 10px;">Date Création</th>
+                <th style="padding: 10px;">Action</th>
+            </tr>
+            {% for equipe in REQUEST_VARS['equipes'] %}
+            <tr style="border-bottom: 1px solid #ccc;">
+                <td style="padding: 10px; font-size: 1.2em;">
+                    <strong>{{ equipe[1] }}</strong>
+                </td>
+                
+                <td style="padding: 10px;">{{ equipe[2] }}</td>
+                
+                <td style="padding: 10px;">
+                    <form method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer l\'équipe {{ equipe[1] }} ?');">
+                        <input type="hidden" name="couleur_a_supprimer" value="{{ equipe[0] }}">
+                        <input type="submit" name="bouton_supprimer" value="Supprimer" style="background-color: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucune équipe disponible.</p>
+    {% endif %}
+    
+    <br>
+    <a href="ajouter" class="button">Créer une nouvelle équipe</a>
+</div>
+{% endblock %}

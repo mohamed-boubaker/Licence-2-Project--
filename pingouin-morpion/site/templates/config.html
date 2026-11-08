@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h2>Créer une nouvelle configuration</h2>
+
+<form method="POST">
+    <br>
+    <label for="id_config">Nom de la config (ID unique) :</label>
+    <input type="text" id="id_config" name="id_config" placeholder="Ex: CONF_RAPIDE" required>
+    <br><br>
+    
+    <label>Taille de la grille :</label>
+    <div>
+        <input type="radio" id="t3" name="taille_grille" value="3" required checked>
+        <label for="t3">3x3</label>
+    </div>
+    <div>
+        <input type="radio" id="t4" name="taille_grille" value="4">
+        <label for="t4">4x4</label>
+    </div>
+
+    <br>
+
+    <label for="nb_tours">Nombre de tours max :</label>
+    <input type="number" id="nb_tours" name="nb_tours" min="1" value="10" required>
+    
+    <br><br>
+
+    <input type="submit" name="bouton_ajouter_config" value="Ajouter cette configuration">
+</form>
+
+{% include 'message.html' %}
+
+{% endblock %}

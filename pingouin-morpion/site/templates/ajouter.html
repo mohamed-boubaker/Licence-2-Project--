@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<div class="center">
+    <h2>Création d'une nouvelle équipe</h2>
+
+    <form method="post" style="max-width: 800px; margin: auto;">
+        
+       <fieldset class="fieldset-info">
+            <legend>Informations</legend>
+            
+            <div class="form-group">
+                <label for="nom_equipe">Nom de l'équipe : </label>
+                <input type="text" name="nom_equipe" id="nom_equipe" placeholder="Les Vengeurs" required />
+            </div>
+
+            <div class="form-group">
+                <label for="couleur_equipe">Couleur de l'équipe : </label>
+                <input type="color" name="couleur_equipe" id="couleur_equipe" class="input-couleur" value="#336699" required />
+            </div>
+        </fieldset>
+
+        <fieldset style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc;">
+            <legend>Recrutez vos Morpions (Entre 6 et 8)</legend>
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+                {% if REQUEST_VARS['morpions_dispo'] %}
+                    {% for m in REQUEST_VARS['morpions_dispo'] %}
+                        <div style="border: 1px solid #ddd; padding: 10px; width: 130px; text-align: center;">
+                            <img src="{{ SESSION['DIRECTORY'] }}/static/img/{{ m[1] }}" style="width: 64px; height: 64px;">
+                            <div style="font-weight: bold;">{{ m[0] }}</div>
+                            <label><input type="checkbox" name="choix_morpions" value="{{ m[0] }}"> Choisir</label>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <div style="text-align: center;">
+            <input type="submit" name="bouton_valider" value="CRÉER L'ÉQUIPE" style="padding: 10px 20px; font-weight: bold;">
+        </div>
+    </form>
+    {% include 'message.html' %}
+</div>
+{% endblock %}

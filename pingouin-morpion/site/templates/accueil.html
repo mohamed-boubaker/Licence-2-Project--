@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h2>Bienvenue dans le jeu du Pingouin Morpion !</h2>
+
+<p id="parag_description">
+    Bienvenue sur l'arène du <strong>Pingouin Morpion</strong> !
+    <br>
+    Ici, les règles classiques changent : alignez vos pions pour gagner, ou éliminez l'adversaire 
+    en utilisant des attaques et des sorts dévastateurs (Boule de feu, Soin, Armageddon).
+    <br><br>
+    Formez votre équipe de morpions, chaque membre ayant des compétences uniques.
+    <br><br>
+    Utilisez le menu à gauche pour vous déplacer entre les différentes sections du jeu.
+    <br><br>
+    
+</p>
+
+
+<!-- Statistiques -->
+<div id="stat">
+<h3>Statistiques</h3>
+
+
+<!-- nb instance -->
+<h4>Nombre d'instances dans certaines tables</h4>
+<ul>
+    <!-- Code ici avec un for et un <li></li> -->
+    <li>Nombre d'équipe : {{ REQUEST_VARS['equipe'][0][0] }}</li>
+    <li>Nombre de partie : {{ REQUEST_VARS['partie'][0][0] }}</li>
+    <li>Nombre de morpion : {{ REQUEST_VARS['morpion'][0][0] }}</li>
+</ul>
+<!-- Top 3 des équipe victorieuse  -->
+<h4>Top-3 des équipes avec le plus de victoires</h4>
+<ul>
+    {% if REQUEST_VARS['top3'] %}
+        {% for ligne in REQUEST_VARS['top3'] %}
+            <li><strong>{{ ligne[0] }}</strong> : {{ ligne[1] }} victoires</li>
+        {% endfor %}
+    {% else %}
+        <li><em>Aucune victoire enregistrée pour le moment.</em></li>
+    {% endif %}
+</ul>
+<!--  patie la plus long et la plus rapide -->
+<h4>Partie la plus rapide et celle la plus longue ;</h4>
+<ul>
+    <!--partie la plus rapide -->
+   {% if REQUEST_VARS['partie_rapide'] %}
+        <li>
+            Plus rapide : Partie <strong>{{ REQUEST_VARS['partie_rapide'][0][0] }}</strong> 
+            ({{ REQUEST_VARS['partie_rapide'][0][1] }} coups)
+        </li>
+    {% else %}
+        <li>Pas encore de partie rapide enregistrée.</li>
+    {% endif %}
+    <!--partie la plus longue -->
+    {% if REQUEST_VARS['partie_longue'] %}
+        <li>
+            Plus longue : Partie <strong>{{ REQUEST_VARS['partie_longue'][0][0] }}</strong> 
+            ({{ REQUEST_VARS['partie_longue'][0][1] }} coups)
+        </li>
+    {% else %}
+        <li>Pas encore de partie longue enregistrée.</li>
+    {% endif %}
+</ul>
+<!-- journalisation -->
+<h4>Nombre moyen de lignes de journalisation, pour chaque couple (mois, année)</h4>
+<ul>
+    {% if REQUEST_VARS['stats_journal'] %}
+        {% for ligne in REQUEST_VARS['stats_journal'] %}
+            <li>
+                <strong>{{ ligne[0] }}</strong> : {{ ligne[1] }} actions enregistrées
+            </li>
+        {% endfor %}
+    {% else %}
+        <li>Aucune activité enregistrée.</li>
+    {% endif %}
+</ul>
+</div>
+
+
+
+{% include 'message.html' %}
+
+{% endblock %}
