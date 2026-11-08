@@ -1,0 +1,19 @@
+nb_surface 4
+surface 0 0 200 1
+surface 10 1 50 2
+surface 15 2 50 3
+surface 0 9 200 10
+
+nb_obstacle 3
+obstacle 20 3 21 4
+obstacle 40 7 41 8
+obstacle 16 3 17 4
+
+nb_portail 1
+portail 24 3 25 4 1
+
+nb_sautauto 0
+nb_sautclick 0
+
+the_end 1100
+

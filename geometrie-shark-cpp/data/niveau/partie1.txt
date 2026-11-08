@@ -1,0 +1,47 @@
+nb_surface 16
+surface 0 0 450 20
+surface 250 20 450 70
+surface 500 160 560 180
+surface 610 300 670 320
+surface 700 0 1700 120
+surface 850 450 1300 600
+surface 1300 200 1700 600
+surface 2000 300 2050 600
+surface 2400 0 2450 300
+surface 2450 0 2700 200
+surface 2550 300 2700 600
+surface 2700 0 3500 100
+surface 2850 100 2900 400
+surface 3200 200 3500 600
+surface 3500 500 3800 600
+surface 3650 0 4000 300
+
+
+
+
+nb_obstacle 5
+obstacle 900 120 940 140
+obstacle 1100 120 1140 140
+
+obstacle 2940 100 2980 120
+obstacle 2980 100 3020 120
+obstacle 3020 100 3060 120
+
+
+
+
+nb_portail 4
+portail 1680 120 1730 200 1
+portail 2550 200 2600 280 1
+
+portail 3480 100 3530 180 0
+portail 3700 420 3750 500 0
+
+
+nb_sautauto 1
+sautauto 2800 100 2820 120
+
+nb_sautclick 1
+sautclick 2970 150 3000 190 
+
+the_end 2000
