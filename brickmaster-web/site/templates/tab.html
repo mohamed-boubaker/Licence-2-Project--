@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    {% if SESSION['UTILISATEUR'] %}
+        <p>Bienvenue, {{ SESSION['UTILISATEUR'] }} !</p>
+    {% else %}
+        <p>Veuillez vous connecter sur l'autre page !!</p>
+    {% endif %}
+
+    <div class="formulaire">
+        <!-- Formulaire pour définir la taille de la grille -->
+        <form method="post" action="tab">
+            <label for="longueur">Longueur de la grille :</label>
+            <input type="number" id="longueur" name="longueur" value="9" min="1" required>
+            <br>
+
+            <label for="largeur">Largeur de la grille :</label>
+            <input type="number" id="largeur" name="largeur" value="9" min="1" required>
+            <br>
+            <p></p>
+            <input type="submit" name="grille_creer" value="OK" class="button-89">
+            <p></p>
+        </form>
+
+        <form method="post" action="tab">
+            <!-- Formulaire affichant les pièces de la pioche et le bouton effaçant celui ci-->
+            <label>Sélectionner une pièce :</label><br>
+            <input type="radio" name="c" value="{{SESSION['pioche'][0]}}" /> Pièce : {{SESSION['pioche'][0]}}
+            <input type="radio" name="c" value="{{SESSION['pioche'][1]}}" /> Pièce : {{SESSION['pioche'][1]}}
+            <input type="radio" name="c" value="{{SESSION['pioche'][2]}}" /> Pièce : {{SESSION['pioche'][2]}}
+            <input type="radio" name="c" value="{{SESSION['pioche'][3]}}" /> Pièce : {{SESSION['pioche'][3]}}
+            <br>
+            <p></p>
+            <input type="submit" name="valider" value="Effacer grille" class="button-89">
+            <p></p>
+        </form>
+        {% for couleur in SESSION['couleur'] %}
+        <!-- Affichage des différentes briques -->
+            <div style="display: inline-block; border:solid; background-color: {{ couleur[4] }}; height: {{ couleur[2] * 20}}px; width: {{ couleur[3] * 20}}px;"></div>
+        {% endfor %}
+        <!-- Affichage de la grille en utilisant la méthode des tableaux-->
+        {% if POST['grille_creer'] %}
+            <p>Voici la grille :</p>
+            <table class="grille">
+                {% for valeur in SESSION['grille'] %}
+                    <tr>
+                        <!--ligne de la grille-->
+                        {% for cellule in valeur %}
+                            <!--case de la grille-->
+                            <td class="cellule">{{ cellule }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        <form method="post" action="tab">
+            <!-- Sélection de la position à chngerdans notre grille -->
+            <label for="position_x">Position x : </label>
+            <input type="number" id="position_x" name="position_x" min="0" required/>
+            <label for="position_y">Position y : </label>
+            <input type="number" id="position_y" name="position_y" min="0" required/>
+
+            <label for="brique">Sélectionner brique :</label>
+            <select id="brique" name="brique">
+                {% for brique in SESSION['pioche'] %}
+                    <option value="{{ brique }}">{{ brique }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" name="place_brique" value="placer">
+        </form>
+        <!-- Réaffichage de notre grille après le changement-->
+        {% if POST['place_brique'] %}
+            <p>Voici la grille : </p>
+            <table class="grille">
+                {% for valeur in SESSION['grille'] %}
+                    <tr>
+                        {% for cellule in valeur %}
+                            <td class="cellule">{{ cellule }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        <!-- Dans notre cas, affichage si la fonction a bien marche ou non avec cc ou dd-->
+        <p>{{SESSION['message']}}</p>
+        {% if POST['c'] %}
+            <!-- Affchage de la pièce choisis précédemment quand on efface la grille-->
+            <p>Retourner : {{ POST['c'][0] }}</p>
+        {% endif %}
+    </div>
+{% endblock %}

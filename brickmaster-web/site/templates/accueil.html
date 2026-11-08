@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h2>Le site du projet</h2>
+
+<p id="parag_description">
+	Utilisez le menu en haut pour découvrir les fonctionnalités de ce site.
+</p>
+
+<p>Que faire sur ce site ?</p>
+<ul>
+	<li>Afficher les joueurs dans la base de donnée</li>
+	<li>Enregritrer son pseudo dans la base de donnée</li>
+	<li>Commener une partie de BRICKMASTER</li>
+</ul>
+
+<div>
+	<img src="serial_critique/static/img/legos.png" />
+</div>
+<p>
+	Ici bas les statistiques de la base de données :
+</p>
+{% include 'message.html' %}
+
+{% endblock %}

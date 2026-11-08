@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<h2>Liste des joueurs</h2>
+<ul>
+    <!-- Boucle avec chaque ligne de la table joueur -->
+    {% for instance in REQUEST_VARS['joueur'] %}
+    <li>N° {{ instance[0] }}, nom : {{ instance[1] }}<em>, inscrit le : {{ instance[2] }}</em>
+    <br>
+    {% if instance[3] == None %}
+        <p>PAS D'AVATAR</p>
+    {% else %}
+        <h4>AVATAR : <img src="{{instance[3]}}" alt="avatar de {{instance[1]}}" width="50px" height="50px"/></h4>
+    {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

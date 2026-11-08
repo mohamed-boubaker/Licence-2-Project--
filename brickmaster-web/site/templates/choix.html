@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<h2>Veuillez entrez vos informations afin de commencer à jouer : </h2>
+<form method="post">
+    <!-- Méthode POST d'un formulaire afin d'y importer son nom d'utilisateur et son avatar choisi-->
+    <label for="nom_utilisateur"> Nom d'utilisateur : </label>
+    <input type="text" name="nom_utilisateur" id="nom_utilisateur" placeholder="Nom d'utilisateur" required />
+    <br>
+    <input type="radio" name="avatar" value="serial_critique/static/img/avatar1.png" required /> <img src="serial_critique/static/img/avatar1.png" width="10%" height="10%">
+    <input type="radio" name="avatar" value="serial_critique/static/img/avatar1.png" required /> <img src="serial_critique/static/img/avatar2.png" width="10%" height="10%">
+    <br>
+    <p></p>
+    <input type="submit" name="valider" value="Valider" class="button-89" />
+    <p></p>
+</form>
+{%if POST['valider'] %}
+    <!--Message pour l'utilisateur afin de lui indiquer ce que donne sa requête, dans notre cas s'il a pu importé son nom ou non-->
+    <p>{{REQUEST_VARS['message_usr_import']}}</p>
+    <br>
+    <p>Nom : {{REQUEST_VARS['UTILISATEUR']}}</p>
+{% endif %}
+
+{% endblock %}
